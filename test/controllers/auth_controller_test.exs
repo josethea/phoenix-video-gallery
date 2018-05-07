@@ -2,6 +2,7 @@ defmodule Phoenixvideogallery.AuthControllerTest do
     use Phoenixvideogallery.ConnCase
     alias Phoenixvideogallery.Repo
     alias Phoenixvideogallery.User
+    import Phoenixvideogallery.Factory
 
     @ueberauth_auth %{credentials: %{token: "fdsadfsdfasfasdfasf"}, info: %{email: "example@example.com", first_name: "Juan", last_name: "Perez"}, provider: :google}
 
@@ -18,5 +19,16 @@ defmodule Phoenixvideogallery.AuthControllerTest do
         users = User |> Repo.all
         assert Enum.count(users) == 1
         assert get_flash(conn, :info) == "Thank you for signing in!"
+    end
+
+    test "signs out user", %{conn: conn} do
+        user = insert(:user)
+
+        conn = conn
+        |> assign(:user, user)
+        |> get("/auth/signout")
+        |> get("/")
+
+        assert conn.assigns.user == nil
     end
 end

@@ -7,6 +7,7 @@ defmodule Phoenixvideogallery.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug Phoenixvideogallery.Plugs.SetUser
   end
 
   pipeline :api do
@@ -22,6 +23,7 @@ defmodule Phoenixvideogallery.Router do
   scope "/auth", Phoenixvideogallery do
     pipe_through :browser
 
+    get "/signout", AuthController, :delete
     get "/:provider", AuthController, :request
     get "/:proider/callback", AuthController, :new
   end
