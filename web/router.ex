@@ -19,6 +19,13 @@ defmodule Phoenixvideogallery.Router do
     get "/", PageController, :index
   end
 
+  scope "/auth", Phoenixvideogallery do
+    pipe_through :browser
+
+    get "/:provider", AuthController, :request
+    get "/:proider/callback", AuthController, :new
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", Phoenixvideogallery do
   #   pipe_through :api
